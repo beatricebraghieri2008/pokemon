@@ -55,7 +55,7 @@ def mostra_intera_collezione():
 
 @app.route('/mostra_punti')
 def mostra_punti():
-    return render_template('index.html', output=f"Hai {punti_tot} punti.")
+    return render_template('index.html', output=f"Hai {punti_totali} punti.")
 
 def salva_collezione(pacchetto):
     try:
