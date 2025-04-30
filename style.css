@@ -1,0 +1,89 @@
+/* Definizione di un font personalizzato */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #E0F7FA; /* Colore azzurrino */
+    color: #333;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    background-color: #0097A7; /* Colore più scuro per l'intestazione */
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+p {
+    font-size: 18px;
+}
+
+/* Centra la lista */
+ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
+}
+
+li {
+    background-color: #ffffff;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+li:hover {
+    transform: scale(1.05);
+}
+
+a {
+    text-decoration: none;
+    color: #0097A7; /* Colore dei link */
+    font-size: 18px;
+}
+
+a:hover {
+    color: #006064;
+}
+
+/* Pacchetto */
+.pacchetto {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.carta {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.carta:hover {
+    transform: scale(1.05);
+}
+
+/* Messaggi di output */
+.output {
+    background-color: #B2EBF2; /* Colore azzurro chiaro per i messaggi */
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}

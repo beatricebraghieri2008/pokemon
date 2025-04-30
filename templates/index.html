@@ -5,26 +5,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokémon</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
-    <h1>Benvenuto in Pokémon</h1>
-    <p>scegli un'opzione:</p>
-    <ul>
-        <li><a href="{{ url_for('apri_pacchetto') }}">apri un pacchetto (10 punti)</a></li>
-        <li><a href="{{ url_for('mostra_intera_collezione') }}">mostra collezione completa</a></li>
-        <li><a href="{{ url_for('mostra_punti') }}">mostra punti totali</a></li>
-    </ul>
-    {% if output %}
-        <p>{{ output }}</p>
-        {% if pacchetto %}
+    <header>
+        <h1>Benvenuto in Pokémon!</h1>
+        <p>Esplora il tuo mondo Pokémon e guadagna punti!</p>
+    </header>
+
+    <div class="content">
+        <h2>Scegli un'opzione:</h2>
         <ul>
-            {% for carta in pacchetto %}
-            <li>{{ carta['Nome'] }} ({{ carta['Rarità'] }})</li>
-            {% endfor %}
+            <li><a href="{{ url_for('apri_pacchetto') }}">Apri un pacchetto (10 punti)</a></li>
+            <li><a href="{{ url_for('mostra_intera_collezione') }}">Mostra collezione completa</a></li>
+            <li><a href="{{ url_for('mostra_punti') }}">Mostra i tuoi punti</a></li>
         </ul>
+
+        {% if output %}
+        <div class="output">
+            <p>{{ output }}</p>
+            {% if pacchetto %}
+            <div class="pacchetto">
+                {% for carta in pacchetto %}
+                <div class="carta">
+                    <h3>{{ carta['Nome'] }}</h3>
+                    <p><strong>Rarità:</strong> {{ carta['Rarità'] }}</p>
+                    <p><strong>Attacco:</strong> {{ carta['Attacco'] }}</p>
+                    <p><strong>Difesa:</strong> {{ carta['Difesa'] }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
         {% endif %}
-    {% endif %}
+    </div>
 </body>
 
 </html>
