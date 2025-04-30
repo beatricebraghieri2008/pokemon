@@ -64,24 +64,34 @@ def apri_pacchetto():
 # Funzione per salvare la collezione di carte
 def salva_collezione(pacchetto):
     try:
-        # Prova a caricare la collezione esistente dal file
-        collezione = pd.read_csv('carte_trovate.csv')
-        collezione = pd.concat([collezione, pd.DataFrame(pacchetto)], ignore_index=True)
-    except FileNotFoundError:
-        # Se il file non esiste, crea un nuovo dataframe
-        collezione = pd.DataFrame(pacchetto)
+        # Carica la collezione esistente dal file CSV
+        collezione = pd.read_csv('carte_trovate.csv')  
+    except:
+        # Se il file non esiste, crea un DataFrame vuoto
+        collezione = pd.DataFrame()
+
+    # Aggiungi i nuovi dati alla collezione
+    collezione = collezione.append(pd.DataFrame(pacchetto))
 
     # Salva la collezione aggiornata nel file CSV
-    collezione.to_csv('carte_trovate.csv', index=False)
+    collezione.to_csv('carte_trovate.csv', index=False)  # Salva il DataFrame nel file CSV senza l'indice
 
 # Route per mostrare la collezione di carte
 @app.route('/mostra_collezione')
 def mostra_intera_collezione():
+    # Prova a caricare la collezione dal file CSV
     try:
-        collezione_completa = pd.read_csv('carte_trovate.csv').to_dict(orient='records')
-        return render_template('index.html', output="Ecco la tua collezione:", pacchetto=collezione_completa)
-    except FileNotFoundError:
+        collezione_completa = pd.read_csv('carte_trovate.csv')  # Carica il file CSV
+    except:
+        collezione_completa = pd.DataFrame()  # Se non esiste, crea un DataFrame vuoto
+    
+    # Se non ci sono carte nella collezione, restituiamo il messaggio di errore
+    if len(collezione_completa) == 0:  # Controlla se il DataFrame è vuoto
         return render_template('index.html', output="Nessuna collezione trovata.")
+    
+    # Altrimenti, mostra la collezione
+    collezione_completa = collezione_completa.to_dict(orient='records')
+    return render_template('index.html', output="Ecco la tua collezione:", pacchetto=collezione_completa)
 
 # Route per mostrare i punti totali
 @app.route('/mostra_punti')
