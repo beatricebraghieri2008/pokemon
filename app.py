@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for 
 import random
 import pandas as pd
-import csv
+
 
 app = Flask(__name__)
 
@@ -25,25 +25,52 @@ def apri_pacchetto():
     punti_guadagnati = 0
     if punti_totali >= 10:
         punti_totali -= 10
-        for _ in range(5):
-            rarita_casuale = random.choices(list(probabilità.keys()), weights=probabilità.values(), k=1)[0]
-            carta = dataframe_pokemon[dataframe_pokemon['Rarità'] == rarita_casuale].sample(1).iloc[0].to_dict()
-            pacchetto.append(carta)
+      
+pacchetto = []
 
-            if rarita_casuale == 'Comune':
-                punti_guadagnati += 2
-            elif rarita_casuale == 'Non Comune':
-                punti_guadagnati += 5
-            elif rarita_casuale == 'Rara':
-                punti_guadagnati += 10
-            elif rarita_casuale == 'Ultra Rara':
-                punti_guadagnati += 20
+for _ in range(5):
+    # Seleziona una rarità casuale dalla lista delle chiavi senza pesi
+    rarita_casuale = random.choice(list(probabilità.keys()))
+    
+    # Seleziona una carta casuale dal dataframe in base alla rarità
+    carta = dataframe_pokemon[dataframe_pokemon['Rarità'] == rarita_casuale].sample(1).iloc[0].to_dict()
+    
+    # Aggiungi la carta al pacchetto
+    pacchetto.append(carta)
 
-        punti_totali += punti_guadagnati
-        salva_collezione(pacchetto)
-        return render_template('index.html', output=f"Hai guadagnato {punti_guadagnati} punti.", pacchetto=pacchetto)
-    else:
-        return render_template('index.html', output="Non hai abbastanza punti.")
+# Variabile globale per salvare tutte le collezioni
+collezioni_salvate = []
+
+# Funzione salva_collezione
+def salva_collezione(pacchetto):
+    collezioni_salvate.append(pacchetto)  # Aggiungi pacchetto alla lista globale
+# Inizializzazione dei punti guadagnati
+punti_guadagnati = 0
+
+# Verifica della rarità e aggiornamento dei punti
+if rarita_casuale == 'Comune':
+    punti_guadagnati += 2
+elif rarita_casuale == 'Non Comune':
+    punti_guadagnati += 5
+elif rarita_casuale == 'Rara':
+    punti_guadagnati += 10
+elif rarita_casuale == 'Ultra Rara':
+    punti_guadagnati += 20
+
+# Aggiornamento dei punti totali
+punti_totali += punti_guadagnati
+
+# Salvataggio della collezione (se necessario)
+salva_collezione(pacchetto)
+
+# Verifica e renderizzazione in base ai punti totali
+if punti_totali >= 10:
+    return render_template('index.html', output=f"Hai guadagnato {punti_guadagnati} punti.", pacchetto=pacchetto)
+else:
+    return render_template('index.html', output="Non hai abbastanza punti.")
+
+
+
 
 @app.route('/mostra_collezione')
 def mostra_intera_collezione():
