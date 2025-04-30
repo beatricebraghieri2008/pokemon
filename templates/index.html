@@ -16,16 +16,14 @@
         <li><a href="{{ url_for('mostra_punti') }}">mostra punti totali</a></li>
     </ul>
     {% if output %}
-
-    <p>{{ output }}</p>
-    {% if pacchetto %}
-    <ul>
-        {% for carta in pacchetto %}
-        <li>{{ carta }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    </div>
+        <p>{{ output }}</p>
+        {% if pacchetto %}
+        <ul>
+            {% for carta in pacchetto %}
+            <li>{{ carta['Nome'] }} ({{ carta['Rarità'] }})</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     {% endif %}
 </body>
 

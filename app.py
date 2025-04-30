@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for 
 import random
 import pandas as pd
 import csv
@@ -27,7 +27,7 @@ def apri_pacchetto():
         punti_totali -= 10
         for _ in range(5):
             rarita_casuale = random.choices(list(probabilità.keys()), weights=probabilità.values(), k=1)[0]
-            carta = dataframe_pokemon[dataframe_pokemon['Rarità'] == rarita_casuale].iloc[0].to_dict()
+            carta = dataframe_pokemon[dataframe_pokemon['Rarità'] == rarita_casuale].sample(1).iloc[0].to_dict()
             pacchetto.append(carta)
 
             if rarita_casuale == 'Comune':
