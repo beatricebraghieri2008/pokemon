@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 import random
 import pandas as pd
+import csv
 
 app = Flask(__name__)
 
-dataframe_pokemon = pd.read_csv('pokemon.csv')
+dataframe_pokemon = pd.read_csv('pokemon (1).csv')
 punti_totali = 100
 probabilità = {
     'Comune': 0.7,
@@ -22,8 +23,8 @@ def apri_pacchetto():
     global punti_totali
     pacchetto = []
     punti_guadagnati = 0
-    if punti_tot >= 10:
-        punti_tot -= 10
+    if punti_totali >= 10:
+        punti_totali -= 10
         for _ in range(5):
             rarita_casuale = random.choices(list(probabilità.keys()), weights=probabilità.values(), k=1)[0]
             carta = dataframe_pokemon[dataframe_pokemon['Rarità'] == rarita_casuale].iloc[0].to_dict()
