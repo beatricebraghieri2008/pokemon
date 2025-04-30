@@ -34,19 +34,10 @@ def apri_pacchetto():
     if punti_totali >= 10:
         punti_totali -= 10  # Deduci 10 punti dal totale per aprire il pacchetto
 
-        # Verifica se il dataframe dei Pokémon non è vuoto
-        if dataframe_pokemon.empty:
-            return render_template('index.html', output="Il database dei Pokémon è vuoto. Non è possibile aprire il pacchetto.")
-        
         # Seleziona 5 carte casuali in base alla probabilità
         for _ in range(5):
             rarita_casuale = random.choice(list(probabilità.keys()))  # Selezione casuale della rarità
-            carte_possibili = dataframe_pokemon[dataframe_pokemon['Rarità'] == rarita_casuale]
-            
-            if carte_possibili.empty:
-                continue  # Se non ci sono carte con quella rarità, salta e passa alla successiva
-            
-            carta = carte_possibili.sample(1).iloc[0].to_dict()  # Carta casuale
+            carta = dataframe_pokemon[dataframe_pokemon['Rarità'] == rarita_casuale].sample(1).iloc[0].to_dict()  # Carta casuale
             pacchetto.append(carta)
 
             # Aggiorna i punti guadagnati in base alla rarità
@@ -73,29 +64,32 @@ def apri_pacchetto():
 # Funzione per salvare la collezione di carte
 def salva_collezione(pacchetto):
     try:
-        # Carica la collezione esistente, se presente
-        collezione = pd.read_csv('carte_trovate.csv')
+        # Carica la collezione esistente dal file CSV
+        collezione = pd.read_csv('carte_trovate.csv')  
     except:
-        collezione = pd.DataFrame()  # Se il file non esiste, crea un dataframe vuoto
+        # Se il file non esiste, crea un DataFrame vuoto
+        collezione = pd.DataFrame()
 
-    # Aggiungi le nuove carte manualmente senza usare append o concat
-    for carta in pacchetto:
-        collezione = collezione.append(carta, ignore_index=True)
+    # Aggiungi i nuovi dati alla collezione
+    collezione = collezione.append(pd.DataFrame(pacchetto))
 
-    # Sovrascrivi il file CSV con il nuovo contenuto
-    collezione.to_csv('carte_trovate.csv', index=False)
+    # Salva la collezione aggiornata nel file CSV
+    collezione.to_csv('carte_trovate.csv', index=False)  # Salva il DataFrame nel file CSV senza l'indice
 
 # Route per mostrare la collezione di carte
 @app.route('/mostra_collezione')
 def mostra_intera_collezione():
+    # Prova a caricare la collezione dal file CSV
     try:
-        collezione_completa = pd.read_csv('carte_trovate.csv')
+        collezione_completa = pd.read_csv('carte_trovate.csv')  # Carica il file CSV
     except:
-        collezione_completa = pd.DataFrame()  # Se il file non esiste o è vuoto
-
-    if collezione_completa.empty:
+        collezione_completa = pd.DataFrame()  # Se non esiste, crea un DataFrame vuoto
+    
+    # Se non ci sono carte nella collezione, restituiamo il messaggio di errore
+    if len(collezione_completa) == 0:  # Controlla se il DataFrame è vuoto
         return render_template('index.html', output="Nessuna collezione trovata.")
-
+    
+    # Altrimenti, mostra la collezione
     collezione_completa = collezione_completa.to_dict(orient='records')
     return render_template('index.html', output="Ecco la tua collezione:", pacchetto=collezione_completa)
 
