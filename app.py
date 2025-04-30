@@ -72,16 +72,17 @@ def apri_pacchetto():
 
 # Funzione per salvare la collezione di carte
 def salva_collezione(pacchetto):
-    # Carica la collezione esistente, se presente
     try:
+        # Carica la collezione esistente, se presente
         collezione = pd.read_csv('carte_trovate.csv')
     except:
         collezione = pd.DataFrame()  # Se il file non esiste, crea un dataframe vuoto
 
-    # Aggiungi i nuovi dati alla collezione
-    collezione = collezione.append(pd.DataFrame(pacchetto), ignore_index=True)
+    # Aggiungi le nuove carte manualmente senza usare append o concat
+    for carta in pacchetto:
+        collezione = collezione.append(carta, ignore_index=True)
 
-    # Salva la collezione nel file CSV
+    # Sovrascrivi il file CSV con il nuovo contenuto
     collezione.to_csv('carte_trovate.csv', index=False)
 
 # Route per mostrare la collezione di carte
